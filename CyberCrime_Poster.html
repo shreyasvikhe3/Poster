@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0a0f2e;
+      font-family: 'Inter', system-ui, sans-serif;
+      color: #e8eaf6;
+      min-height: 100vh;
+    }
+
+    /* ── POSTER WRAPPER ── */
+    .poster {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+      background: linear-gradient(160deg, #0d1545 0%, #0a0f2e 60%, #120820 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* background grid lines */
+    .poster::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(99,179,237,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,179,237,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    /* ── HEADER BAND ── */
+    .header-band {
+      background: linear-gradient(90deg, #1a2980 0%, #26d0ce 100%);
+      border-radius: 16px;
+      padding: 28px 32px 22px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(38,208,206,0.25);
+    }
+    .header-band::after {
+      content: '🔐';
+      position: absolute;
+      right: 32px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 80px;
+      opacity: 0.15;
+    }
+    .badge-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 3px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+    .badge.red   { background: rgba(220,38,38,0.4);  border-color: #ef4444; }
+    .badge.green { background: rgba(16,185,129,0.3); border-color: #10b981; }
+    .case-title  { font-size: 36px; font-weight: 900; color: #fff; letter-spacing: -0.5px; line-height: 1.1; }
+    .case-sub    { font-size: 15px; color: rgba(255,255,255,0.80); margin-top: 6px; }
+
+    /* ── SECTION LABEL ── */
+    .sec-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #63b3ed;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sec-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg,rgba(99,179,237,0.4),transparent);
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(99,179,237,0.15);
+      border-radius: 14px;
+      padding: 18px;
+      transition: border-color 0.2s;
+    }
+    .card:hover { border-color: rgba(99,179,237,0.4); }
+
+    /* ── TEAM ROW ── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .team-card {
+      background: linear-gradient(135deg, rgba(26,41,128,0.6) 0%, rgba(38,208,206,0.1) 100%);
+      border: 1px solid rgba(38,208,206,0.25);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+    }
+    .team-avatar {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      margin: 0 auto 10px;
+    }
+    .team-name  { font-size: 14px; font-weight: 700; color: #fff; }
+    .team-role  { font-size: 12px; color: #63b3ed; margin-top: 3px; }
+    .team-evid  { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 6px; }
+
+    /* ── TIMELINE ── */
+    .timeline {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 22px; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #1a2980, #26d0ce, #1a2980);
+      z-index: 0;
+    }
+    .tl-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    .tl-dot {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      border: 2px solid;
+      background: #0a0f2e;
+      flex-shrink: 0;
+    }
+    .tl-time  { font-size: 11px; color: #63b3ed; font-weight: 700; margin-top: 8px; }
+    .tl-evid  { font-size: 10px; color: rgba(255,255,255,0.5); font-weight: 600; }
+    .tl-label { font-size: 12px; color: #e8eaf6; text-align: center; margin-top: 4px; max-width: 90px; line-height: 1.3; }
+
+    /* ── EVIDENCE GRID ── */
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .ev-card {
+      border-radius: 14px;
+      padding: 16px 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .ev-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .ev-id      { font-size: 10px; font-weight: 700; letter-spacing: 1px; opacity: 0.7; }
+    .ev-icon    { font-size: 28px; margin: 8px 0; }
+    .ev-title   { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .ev-inv     { font-size: 11px; opacity: 0.6; margin-bottom: 10px; }
+    .ev-count   { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+    .ev-findings { margin-top: 10px; }
+    .ev-findings li { font-size: 11px; color: rgba(255,255,255,0.75); margin-bottom: 4px; padding-left: 14px; position: relative; line-height: 1.4; list-style: none; }
+    .ev-findings li::before { content: '›'; position: absolute; left: 0; color: #63b3ed; font-weight: 700; }
+
+    /* per-card colour themes */
+    .ev-wa  { background: linear-gradient(135deg,rgba(16,185,129,0.12),rgba(16,185,129,0.04)); border:1px solid rgba(16,185,129,0.25); }
+    .ev-wa::before { background: #10b981; }
+    .ev-em  { background: linear-gradient(135deg,rgba(99,102,241,0.15),rgba(99,102,241,0.04)); border:1px solid rgba(99,102,241,0.25); }
+    .ev-em::before { background: #6366f1; }
+    .ev-wb  { background: linear-gradient(135deg,rgba(239,68,68,0.12),rgba(239,68,68,0.04)); border:1px solid rgba(239,68,68,0.25); }
+    .ev-wb::before { background: #ef4444; }
+    .ev-sm  { background: linear-gradient(135deg,rgba(245,158,11,0.12),rgba(245,158,11,0.04)); border:1px solid rgba(245,158,11,0.25); }
+    .ev-sm::before { background: #f59e0b; }
+    .ev-py  { background: linear-gradient(135deg,rgba(236,72,153,0.12),rgba(236,72,153,0.04)); border:1px solid rgba(236,72,153,0.25); }
+    .ev-py::before { background: #ec4899; }
+
+    /* ── BOTTOM GRID: Mistakes | Consequences | Prevention | Verdict ── */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.3fr 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .info-card {
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .info-title {
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .info-list { list-style: none; }
+    .info-list li {
+      font-size: 12px; color: rgba(255,255,255,0.75);
+      margin-bottom: 6px; padding-left: 16px;
+      position: relative; line-height: 1.4;
+    }
+    .info-list li::before { position:absolute; left:0; font-weight:700; }
+
+    .mistakes    { background:rgba(239,68,68,0.08);   border:1px solid rgba(239,68,68,0.2); }
+    .mistakes .info-title   { color:#f87171; }
+    .mistakes li::before    { content:'✗'; color:#f87171; }
+
+    .conseq     { background:rgba(249,115,22,0.08);  border:1px solid rgba(249,115,22,0.2); }
+    .conseq .info-title     { color:#fb923c; }
+    .conseq li::before      { content:'⚡'; color:#fb923c; }
+
+    .prevent    { background:rgba(16,185,129,0.08);  border:1px solid rgba(16,185,129,0.2); }
+    .prevent .info-title    { color:#34d399; }
+    .prevent li::before     { content:'✓'; color:#34d399; }
+
+    .verdict-card {
+      background: linear-gradient(135deg,rgba(99,102,241,0.15),rgba(139,92,246,0.08));
+      border:1px solid rgba(139,92,246,0.3);
+      border-radius:14px; padding:16px;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+    }
+    .verdict-badge {
+      background: linear-gradient(90deg,#6366f1,#8b5cf6);
+      border-radius:30px; padding:6px 16px;
+      font-size:11px; font-weight:700; color:#fff;
+      letter-spacing:1px; margin-bottom:12px;
+    }
+    .verdict-num { font-size:52px; font-weight:900; color:#a78bfa; line-height:1; }
+    .verdict-label { font-size:12px; color:rgba(255,255,255,0.6); margin-top:4px; }
+    .verdict-types { margin-top:12px; display:flex; flex-direction:column; gap:6px; width:100%; }
+    .vt-row {
+      display:flex; align-items:center; gap:8px;
+      background:rgba(255,255,255,0.05); border-radius:8px; padding:6px 10px;
+    }
+    .vt-dot { width:8px;height:8px;border-radius:50%;flex-shrink:0; }
+    .vt-text { font-size:11px; color:rgba(255,255,255,0.8); }
+
+    /* ── SLOGAN FOOTER ── */
+    .slogan-bar {
+      background: linear-gradient(90deg, #1a2980 0%, #26d0ce 100%);
+      border-radius:14px; padding:20px 32px;
+      text-align:center;
+      box-shadow: 0 4px 24px rgba(38,208,206,0.2);
+    }
+    .slogan-text {
+      font-size:22px; font-weight:900; color:#fff;
+      letter-spacing:-0.3px;
+    }
+    .slogan-sub  { font-size:13px; color:rgba(255,255,255,0.7); margin-top:4px; }
+
+    /* ── DISCLAIMER STRIP ── */
+    .disclaimer {
+      text-align:center; margin-top:14px;
+      font-size:11px; color:rgba(255,255,255,0.3);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:8px; padding:8px;
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      body { background:#fff !important; }
+      .poster { background:#fff !important; color:#111 !important; }
+      .poster::before { display:none; }
+    }
+  </style>
+</head>
+<body>
+<div class="poster">
+
+  <!-- ═══════════════ HEADER ═══════════════ -->
+  <div class="header-band">
+    <div class="badge-row">
+      <span class="badge">Digital Literacy &amp; Applications</span>
+      <span class="badge">Activity 4 – CIE II</span>
+      <span class="badge red">⚠ Fictional Investigation</span>
+      <span class="badge green">Academic Purpose Only</span>
+    </div>
+    <div class="case-title">🔍 Operation Fake KYC</div>
+    <div class="case-sub">Banking Phishing · Social Engineering · Identity Fraud · Payment Forgery &nbsp;|&nbsp; Case Date: 12 November 2026</div>
+  </div>
+
+  <!-- ═══════════════ TEAM ═══════════════ -->
+  <div class="sec-label">👥 Investigation Team</div>
+  <div class="team-grid" style="margin-bottom:20px;">
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#1a2980,#26d0ce);">👨‍💼</div>
+      <div class="team-name">Omkumar Rajendra Mahajan</div>
+      <div class="team-role">🏅 Team Lead &amp; Lead Investigator</div>
+      <div class="team-evid">E-01 WhatsApp &nbsp;|&nbsp; E-02 Email</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#312e81,#6366f1);">👨‍🔬</div>
+      <div class="team-name">Shreyas Vikhe</div>
+      <div class="team-role">🌐 Website &amp; Social Media Investigator</div>
+      <div class="team-evid">E-03 Website &nbsp;|&nbsp; E-04 Social Media</div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:linear-gradient(135deg,#831843,#ec4899);">👨‍💻</div>
+      <div class="team-name">Riddhik Kumbhar</div>
+      <div class="team-role">💳 Payment Fraud Investigator</div>
+      <div class="team-evid">E-05 Fake Payment Screenshot</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ TIMELINE ═══════════════ -->
+  <div class="sec-label">🕐 Attack Timeline – 12 November 2026</div>
+  <div class="timeline" style="margin-bottom:24px; padding:0 20px;">
+    <div class="tl-step">
+      <div class="tl-dot" style="border-color:#10b981; color:#10b981;">📱</div>
+      <div class="tl-time">10:15 AM</div>
+      <div class="tl-evid">E-01</div>
+      <div class="tl-label">WhatsApp KYC Warning</div>
+    </div>
+    <div class="tl-step">
+      <div class="tl-dot" style="border-color:#6366f1; color:#6366f1;">📧</div>
+      <div class="tl-time">10:30 AM</div>
+      <div class="tl-evid">E-02</div>
+      <div class="tl-label">Fake Banking Email</div>
+    </div>
+    <div class="tl-step">
+      <div class="tl-dot" style="border-color:#ef4444; color:#ef4444;">🌐</div>
+      <div class="tl-time">10:40 AM</div>
+      <div class="tl-evid">E-03</div>
+      <div class="tl-label">Phishing Website</div>
+    </div>
+    <div class="tl-step">
+      <div class="tl-dot" style="border-color:#f59e0b; color:#f59e0b;">📲</div>
+      <div class="tl-time">10:50 AM</div>
+      <div class="tl-evid">E-04</div>
+      <div class="tl-label">Instagram Fake Support</div>
+    </div>
+    <div class="tl-step">
+      <div class="tl-dot" style="border-color:#ec4899; color:#ec4899;">💳</div>
+      <div class="tl-time">11:05 AM</div>
+      <div class="tl-evid">E-05</div>
+      <div class="tl-label">Fake Payment ₹499</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ EVIDENCE CARDS ═══════════════ -->
+  <div class="sec-label">🗂 Five Digital Evidence Exhibits</div>
+  <div class="evidence-grid">
+
+    <!-- E-01 WhatsApp -->
+    <div class="ev-card ev-wa">
+      <div class="ev-id" style="color:#10b981;">E-01</div>
+      <div class="ev-icon">📱</div>
+      <div class="ev-title">WhatsApp Message</div>
+      <div class="ev-inv">Investigator: Omkumar</div>
+      <div class="ev-count" style="background:rgba(16,185,129,0.2);color:#10b981;">7 Indicators</div>
+      <ul class="ev-findings">
+        <li>Unknown sender number</li>
+        <li>Urgent KYC warning</li>
+        <li>Account blocking threat</li>
+        <li>Suspicious external link</li>
+        <li>No bank name provided</li>
+        <li>Generic "Dear Customer"</li>
+        <li>2-hour time pressure</li>
+      </ul>
+    </div>
+
+    <!-- E-02 Email -->
+    <div class="ev-card ev-em">
+      <div class="ev-id" style="color:#6366f1;">E-02</div>
+      <div class="ev-icon">📧</div>
+      <div class="ev-title">Fake Banking Email</div>
+      <div class="ev-inv">Investigator: Omkumar</div>
+      <div class="ev-count" style="background:rgba(99,102,241,0.2);color:#818cf8;">8 Indicators</div>
+      <ul class="ev-findings">
+        <li>Unverified sender domain</li>
+        <li>Urgent subject line</li>
+        <li>False RBI claim</li>
+        <li>Generic greeting</li>
+        <li>External link for creds</li>
+        <li>24-hour deadline</li>
+        <li>Account restriction threat</li>
+        <li>Sent 15 min after E-01</li>
+      </ul>
+    </div>
+
+    <!-- E-03 Website -->
+    <div class="ev-card ev-wb">
+      <div class="ev-id" style="color:#ef4444;">E-03</div>
+      <div class="ev-icon">🌐</div>
+      <div class="ev-title">Phishing Website</div>
+      <div class="ev-inv">Investigator: Shreyas</div>
+      <div class="ev-count" style="background:rgba(239,68,68,0.2);color:#f87171;">10 Indicators</div>
+      <ul class="ev-findings">
+        <li>Bank name in subdomain</li>
+        <li>Unverified domain</li>
+        <li>HTTPS false security</li>
+        <li>Customer ID field</li>
+        <li>Password field</li>
+        <li>KYC doc upload</li>
+        <li>Mimic bank portal</li>
+        <li>Urgency messaging</li>
+        <li>Fictional helpline</li>
+        <li>Same domain as E-01/E-02</li>
+      </ul>
+    </div>
+
+    <!-- E-04 Social Media -->
+    <div class="ev-card ev-sm">
+      <div class="ev-id" style="color:#f59e0b;">E-04</div>
+      <div class="ev-icon">📲</div>
+      <div class="ev-title">Social Media DM</div>
+      <div class="ev-inv">Investigator: Shreyas</div>
+      <div class="ev-count" style="background:rgba(245,158,11,0.2);color:#fbbf24;">11 Indicators</div>
+      <ul class="ev-findings">
+        <li>No verification badge</li>
+        <li>Only 23 followers</li>
+        <li>Unsolicited DM</li>
+        <li>Requested Customer ID</li>
+        <li>Requested mobile no.</li>
+        <li>Requested txn screenshot</li>
+        <li>"Blocked in 1 hour" threat</li>
+        <li>Only 2 posts (new)</li>
+        <li>Suspicious bio link</li>
+        <li>False authority claim</li>
+        <li>Convenience offer lure</li>
+      </ul>
+    </div>
+
+    <!-- E-05 Payment -->
+    <div class="ev-card ev-py">
+      <div class="ev-id" style="color:#ec4899;">E-05</div>
+      <div class="ev-icon">💳</div>
+      <div class="ev-title">Fake Payment ₹499</div>
+      <div class="ev-inv">Investigator: Riddhik</div>
+      <div class="ev-count" style="background:rgba(236,72,153,0.2);color:#f472b6;">10 Indicators</div>
+      <ul class="ev-findings">
+        <li>KYC fee = Always FREE</li>
+        <li>Invalid Transaction ID</li>
+        <li>Fake UPI handles</li>
+        <li>Unregistered recipient</li>
+        <li>Screenshot unverifiable</li>
+        <li>Fabricated Payment ID</li>
+        <li>No app watermark</li>
+        <li>Mimics real receipt UI</li>
+        <li>Sent unsolicited</li>
+        <li>Ties to full case chain</li>
+      </ul>
+    </div>
+
+  </div><!-- /evidence-grid -->
+
+  <!-- ═══════════════ BOTTOM 4-COL GRID ═══════════════ -->
+  <div class="bottom-grid">
+
+    <!-- Victim Mistakes -->
+    <div class="info-card mistakes">
+      <div class="info-title">❌ Victim's Mistakes</div>
+      <ul class="info-list">
+        <li>Engaged with unknown sender</li>
+        <li>Opened phishing email</li>
+        <li>Clicked external links</li>
+        <li>Trusted website appearance</li>
+        <li>Assumed HTTPS = safe</li>
+        <li>Searched bank on Instagram</li>
+        <li>Engaged fake DM account</li>
+        <li>Trusted payment screenshot</li>
+        <li>Didn't know KYC is free</li>
+      </ul>
+    </div>
+
+    <!-- Consequences -->
+    <div class="info-card conseq">
+      <div class="info-title">⚡ Possible Consequences</div>
+      <ul class="info-list">
+        <li>Banking credentials stolen</li>
+        <li>Unauthorized transactions</li>
+        <li>Full account takeover</li>
+        <li>KYC document misuse</li>
+        <li>Identity theft</li>
+        <li>Loan fraud in victim's name</li>
+        <li>Financial loss (₹499+)</li>
+        <li>Psychological stress</li>
+        <li>Difficult loss recovery</li>
+      </ul>
+    </div>
+
+    <!-- Prevention -->
+    <div class="info-card prevent">
+      <div class="info-title">✅ Preventive Measures</div>
+      <ul class="info-list">
+        <li>Never click links from unknown senders</li>
+        <li>Verify bank via official helpline</li>
+        <li>Type bank URL manually always</li>
+        <li>HTTPS alone ≠ safe website</li>
+        <li>Never share OTP / PIN / password</li>
+        <li>Check blue ✓ before trusting accounts</li>
+        <li>Verify payments via bank statement</li>
+        <li>KYC is ALWAYS free — fee = fraud</li>
+        <li>Report fraud: cybercrime.gov.in</li>
+        <li>Call 1930 — National Cyber Helpline</li>
+      </ul>
+    </div>
+
+    <!-- Verdict card -->
+    <div class="verdict-card">
+      <div class="verdict-badge">CASE VERDICT</div>
+      <div class="verdict-num">46</div>
+      <div class="verdict-label">Total Suspicious Indicators<br>Across 5 Evidence Items</div>
+      <div class="verdict-types" style="margin-top:14px;">
+        <div class="vt-row">
+          <div class="vt-dot" style="background:#10b981;"></div>
+          <div class="vt-text">Phishing (WhatsApp + Email)</div>
+        </div>
+        <div class="vt-row">
+          <div class="vt-dot" style="background:#ef4444;"></div>
+          <div class="vt-text">Website Spoofing</div>
+        </div>
+        <div class="vt-row">
+          <div class="vt-dot" style="background:#f59e0b;"></div>
+          <div class="vt-text">Social Media Impersonation</div>
+        </div>
+        <div class="vt-row">
+          <div class="vt-dot" style="background:#ec4899;"></div>
+          <div class="vt-text">Payment Fraud</div>
+        </div>
+        <div class="vt-row" style="margin-top:4px;background:rgba(99,102,241,0.15);border:1px solid rgba(139,92,246,0.3);">
+          <div class="vt-dot" style="background:#a78bfa;"></div>
+          <div class="vt-text" style="color:#c4b5fd;font-weight:700;">Coordinated Multi-Channel Attack</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /bottom-grid -->
+
+  <!-- ═══════════════ SLOGAN ═══════════════ -->
+  <div class="slogan-bar">
+    <div class="slogan-text">🛡️ &nbsp;"Think Before You Click – Protect Your Digital Identity!"</div>
+    <div class="slogan-sub">Cyber Safety Slogan &nbsp;·&nbsp; Operation Fake KYC &nbsp;·&nbsp; Digital Literacy &amp; Applications – Activity 4</div>
+  </div>
+
+  <!-- ═══════════════ DISCLAIMER ═══════════════ -->
+  <div class="disclaimer">
+    ⚠ All evidence in this poster is entirely fictional and created for academic purposes only under Digital Literacy and Applications – Activity 4, CIE II.
+    No real persons, bank accounts, phone numbers, email addresses, websites, or financial transactions are involved.
+    Victim: Rahul Sharma (Fictional) &nbsp;|&nbsp; Case: Operation Fake KYC (Academic Simulation)
+  </div>
+
+</div><!-- /poster -->
+</body>
+</html>
